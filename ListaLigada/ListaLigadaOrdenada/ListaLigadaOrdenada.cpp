@@ -125,29 +125,109 @@ void inserirElemento()
 	cin >> novo->valor;
 	novo->prox = NULL;
 
-	if (primeiro == NULL)
-	{
-		primeiro = novo;
-	}
-	else
-	{
-		// procura o final da lista
-		NO* aux = primeiro;
-		while (aux->prox != NULL) {
-			aux = aux->prox;
+	NO* procu = posicaoElemento(novo->valor);
+	if (procu == NULL) {
+		if (primeiro == NULL)
+		{
+			primeiro = novo;
 		}
-		aux->prox = novo;
+		else
+		{
+			NO* aux = primeiro;
+
+			NO* mudar = NULL;
+			while (aux->prox != NULL) {
+				
+				if (novo->valor < aux->prox->valor) {
+					
+					if (novo->valor < aux->valor) {
+						primeiro = novo;
+						novo->prox = aux;
+					}
+					mudar = aux->prox;
+					aux->prox = novo;
+					novo->prox = mudar;
+					break;
+				}
+
+				else {
+					aux = aux->prox;
+				}
+			}
+
+			while (aux->prox == NULL) {
+				
+				if (novo->valor < aux->valor) {
+					primeiro = novo;
+					novo->prox = aux;
+				}
+				else {
+					aux->prox = novo;
+				}
+			}
+		}
+	}
+	else {
+		cout << "O numero ja existe na lista.\n";
 	}
 }
 
 void excluirElemento()
 {
+	int valor;
+	cout << "Digite o numero que deseja excluir: " << endl;
+	cin >> valor;
+	NO* procu = posicaoElemento(valor);
 
+	if (procu != NULL) {
+		NO* aux = primeiro;
+		NO* ex = NULL;
+
+		if (aux->valor == valor) {
+			ex = primeiro;
+			primeiro = aux->prox;
+			free(ex);
+		}
+		else if (aux->prox != NULL) {
+			while (aux->prox->valor == valor) {
+				ex = aux->prox;
+				primeiro->prox = ex->prox;
+				free(ex);
+				break;
+			}
+
+		}
+	}
 }
 
-void buscarElemento()
+void buscarElemento(){
+	int valor;
+	cout << "Digite o numero que deseja excluir: \n";
+	cin >> valor;
+	NO* procu = posicaoElemento(valor);
+	NO* aux = primeiro;
+	if (procu != NULL) {
+		while (aux->prox->valor < valor) {
+			aux = aux->prox;
+		}
+		NO* posicao = aux->prox;
+		cout << "O numero esta na posicao: " << posicao << endl;
+	}
+	else {
+		cout << "Numero nao encontrado.\n";
+	}
+}
+
+
+NO* posicaoElemento(int numero)
 {
-
+	NO* aux = primeiro;
+	while (aux != NULL) {
+		if (aux->valor == numero)
+		{
+			break;
+		}
+		aux = aux->prox;
+	}
+	return aux;
 }
-
-
